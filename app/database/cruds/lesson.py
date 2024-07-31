@@ -320,7 +320,8 @@ async def lis_all_lessons(session: AsyncSession):
                     description=sec.description,
                     thumbnail_url=sec.thumbnail,
                     section_level=sec.section_level,
-                    examples=sec.examples
+                    examples=sec.examples,
+                    voice=sec.voice
                 ))
             
             exs = select(Exercise).filter(Exercise.lesson_id == less.id)
