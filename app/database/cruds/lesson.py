@@ -81,7 +81,8 @@ async def get_lesson_by_grammar_id(grammar_id:int, session:AsyncSession):
                 description=sec.description,
                 thumbnail_url=sec.thumbnail,
                 section_level=sec.section_level,
-                examples=sec.examples
+                examples=sec.examples,
+                voice=sec.voice
             ))
         list_of_exercises:RepsonseExerciseDto = []
         ex = select(Exercise).where(Exercise.lesson_id==les.id)
@@ -131,7 +132,8 @@ async def create_new_lessons(is_included_exercies:bool,less:CreateLessonDto, ses
             description=sec.description,
             thumbnail_url=sec.thumbnail,
             section_level=sec.section_level,
-            examples=sec.examples
+            examples=sec.examples,
+            voice=sec.voice
         ))
         # check section level - must be the same
     i = 1
@@ -267,7 +269,8 @@ async def get_lesson_by_uuid(ls_uuid, session:AsyncSession)->lesson.ResponseLess
             description=sec.description,
             thumbnail_url=sec.thumbnail,
             section_level=sec.section_level,
-            examples=sec.examples
+            examples=sec.examples,
+            voice=sec.voice
         ))
 
     list_of_exercises:RepsonseExerciseDto = []
