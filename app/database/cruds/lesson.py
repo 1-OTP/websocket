@@ -137,14 +137,14 @@ async def create_new_lessons(is_included_exercies:bool,less:CreateLessonDto, ses
         ))
         # check section level - must be the same
     i = 1
-    if len(list_of_sections)>1:
-        for s in list_of_sections:
-            if s.section_level!=list_of_sections[0].section_level:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"All sections must have the same level 😎")
-            if i!= len(list_of_sections):
-                if s.section_uuid==list_of_sections[i].section_uuid:
-                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"All sections must not have the same uuid 😏")
-                i+=i
+    # if len(list_of_sections)>1:
+    #     for s in list_of_sections:
+    #         if s.section_level!=list_of_sections[0].section_level:
+    #             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"All sections must have the same level 😎")
+    #         if i!= len(list_of_sections):
+    #             if s.section_uuid==list_of_sections[i].section_uuid:
+    #                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"All sections must not have the same uuid 😏")
+    #             i+=i
     
     if is_included_exercies is True:
         for ex_uuid in less.exercises_uuids:
