@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from datetime import date
 from app.database.database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database.cruds.lesson import create_new_lessons, lis_all_lessons, get_lesson_by_level, delete_lesson_by_uuid
+from app.database.cruds.lesson import create_new_lessons, lis_all_lessons, get_lesson_by_level, delete_lesson_by_uuid,get_lesson_byuuid
 from app.database.schemas.lesson import CreateLessonDto
 from app.database.schemas import payload
 from typing import Annotated
@@ -44,4 +44,13 @@ async def delete_lesson(id:str, db:AsyncSession=Depends(get_db)):
         status=int(status.HTTP_200_OK),
         payload=await delete_lesson_by_uuid(id, db),
         message="Lesson deleted successfully"
+    )
+
+@lesson_router.get("/lessons/detail/")
+async def get_lessons_by_uuid(uuid:str, db:AsyncSession=Depends(get_db)):
+    return payload.BaseResponse(
+        date=date.today(),
+        status=int(status.HTTP_200_OK),
+        payload=await get_lesson_byuuid(uuid, db),
+        message="Lesson found"
     )

@@ -17,7 +17,47 @@ from app.utils.verify import is_valid_uuid
 
 
 
-
+async def get_lesson_byuuid(uuid:str, session:AsyncSession):
+    if not is_valid_uuid(uuid):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid UUID format")
+    query = select(Lesson).filter(Lesson.lesson_uuid==uuid)
+    result = await session.execute(query)
+    les:Lesson = result.scalars().first()
+    if not les:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Lesson not found 😶‍🌫️")
+    
+    
+    qs = select(Section).filter(Section.lesson_id==les.id)
+    result = await session.execute(qs)
+    sections = result.scalars().all()
+    list_of_sections:ResponseSectionDto = []
+    for sec in sections:
+        list_of_sections.append(ResponseSectionDto(
+            section_uuid=sec.section_uuid,
+            title=sec.section_name,
+            description=sec.description,
+            thumbnail_url=sec.thumbnail,
+            section_level=sec.section_level,
+            examples=sec.examples,
+            voice=sec.voice
+        ))
+    list_of_exercises:RepsonseExerciseDto = []
+    ex = select(Exercise).where(Exercise.lesson_id==les.id)
+    result = await session.execute(ex)
+    exs = result.scalars().all()
+    for ex in exs:
+        list_of_exercises.append(
+            await find_exercise_by_uuid(ex.ex_uuid, session)
+        )
+    return lesson.ResponseLessonDto(
+        lesson_uuid=les.lesson_uuid,
+        lesson_title=les.name,
+        description=les.description,
+        thumbnail=les.thumbnail,
+        sections=list_of_sections,
+        lesson_level=les.lesson_level,
+        exercises=list_of_exercises
+    )
 
 async def get_lesson_by_vocabulary_id(vocab_id:int, session:AsyncSession):
     query = select(Lesson).filter(Lesson.vocabulary_id == vocab_id)
@@ -103,6 +143,7 @@ async def get_lesson_by_grammar_id(grammar_id:int, session:AsyncSession):
                 exercises=list_of_exercises
         ) )
     return all_lessons
+
 async def create_new_lessons(is_included_exercies:bool,less:CreateLessonDto, session: AsyncSession):
 
     # verify that lesson not existing
