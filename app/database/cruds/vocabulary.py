@@ -10,6 +10,17 @@ from app.utils.verify import is_valid_uuid
 from app.database.schemas.english_level import MyLevel
 import uuid
 
+async def delete_vocabulary(uuid, session:AsyncSession):
+    if not is_valid_uuid(uuid):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid UUID format")
+    query = select(Vocabulary).where(Vocabulary.vocab_uuid == uuid)
+    result = await session.execute(query)
+    v:Vocabulary = result.scalars().first()
+    if not v:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Vocabulary not found")
+    await session.delete(v)
+    await session.commit()
+    return uuid
 
 async def find_vocabulary_by_level(v_level:str, session:AsyncSession):
     if v_level.upper() not in MyLevel.__members__:

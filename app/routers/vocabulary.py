@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from app.database.database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database.cruds.vocabulary import create_vocabulary, get_all_vocabularies, find_vocabulary_by_level
+from app.database.cruds.vocabulary import create_vocabulary, get_all_vocabularies, find_vocabulary_by_level, delete_vocabulary
 from app.database.schemas.vocabulary import CreateVocabularyDto
 from app.database.schemas import payload
 from datetime import date
@@ -33,4 +33,13 @@ async def get_one_grammar(level:str, db:AsyncSession=Depends(get_db)):
         status=status.HTTP_200_OK,
         payload=await find_vocabulary_by_level(level, db),
         message="Found of all vocabularyies"
+    )
+
+@vocabulary_router.delete("/vocabularies/delete")
+async def delete_vocab_by_uuid(uuid:str, db:AsyncSession=Depends(get_db)):
+    return payload.BaseResponse(
+        date=date.today(),
+        status=status.HTTP_200_OK,
+        payload= await delete_vocabulary(uuid,db),
+        message="Vocabulary has been deleted successfully"
     )

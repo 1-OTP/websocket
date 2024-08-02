@@ -14,6 +14,18 @@ import uuid
 from app.database.schemas import payload, vocabulary
 from app.utils.verify import is_valid_uuid
 
+async def delete_grammar(uuid, session:AsyncSession):
+    if not is_valid_uuid(uuid):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid UUID format")
+    query = select(Grammar).where(Grammar.grammar_uuid == uuid)
+    result = await session.execute(query)
+    g = result.scalars().first()
+    if not result:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Grammar not found")
+    
+    await session.delete(g)
+    await session.commit()
+    return uuid
 
 async def list_all_grammars(session:AsyncSession):
     query = select(Grammar)
