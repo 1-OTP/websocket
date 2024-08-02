@@ -10,6 +10,24 @@ from app.utils.verify import is_valid_uuid
 from app.database.schemas.english_level import MyLevel
 import uuid
 
+
+async def get_vocabulary_byuuid(uuid, session:AsyncSession):
+    query = select(Vocabulary).where(Vocabulary.vocab_uuid==uuid)
+    result = await session.execute(query)
+    v:Vocabulary = result.scalars().first()
+    if not v:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Vocabulary not found")
+
+    return ResponseVocabularyDto(
+            vocabulary_uuid=v.vocab_uuid,
+            titles=v.vocab_name,
+            description=v.description,
+            thumbnail_url=v.thumbnail,
+            lessons=  await get_lesson_by_vocabulary_id(v.id, session)
+    )
+
+
+
 async def delete_vocabulary(uuid, session:AsyncSession):
     if not is_valid_uuid(uuid):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid UUID format")

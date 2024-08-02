@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from app.database.database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database.cruds.grammar import create_grammar,list_all_grammars,get_grammar_by_level, delete_grammar
+from app.database.cruds.grammar import create_grammar,list_all_grammars,get_grammar_by_level, delete_grammar, get_grammar_byuuid
 from app.database.schemas.grammar import CreateGrammarDto
 from app.database.schemas import payload
 from datetime import date
@@ -35,4 +35,12 @@ async def delete_grammar_by_uuid(uuid:str, db:AsyncSession=Depends(get_db)):
         status=status.HTTP_200_OK,
         payload=await delete_grammar(uuid, db),
         message="Grammar deleted successfully"
+    )
+@grammar_router.get("/grammars/grammar-detail/")
+async def get_grammar_by_uui(uuid: str, db:AsyncSession=Depends(get_db)):
+    return payload.BaseResponse(
+        date=date.today(),
+        status=status.HTTP_200_OK,
+        payload=await get_grammar_byuuid(uuid, db),
+        message="Grammar found"
     )
