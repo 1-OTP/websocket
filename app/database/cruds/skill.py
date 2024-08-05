@@ -130,7 +130,7 @@ async def delete_skill_by_uuid(skill_uuid:str, session=AsyncSession):
 
 async def get_all_skills_by_skill_name(name:str, session=AsyncSession):
     if name.upper() not in sname.__members__:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING or LISTENING, but you given {name}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING, LISTENING, or SPEAKING, but you given {name}")
     query = select(Skill).filter(Skill.skill_name.ilike(f"{name}")).order_by(Skill.skill_level)
     result = await session.execute(query)
     skills = result.scalars().all()
