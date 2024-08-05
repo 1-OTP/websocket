@@ -38,7 +38,7 @@ async def login_for_access_token(form_data: LoginUserDto, db: AsyncSession = Dep
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@auth_router.get("/users/me")
+@auth_router.post("/users/me")
 async def read_users_me(tok: token.TokenForVerifyMe , db: AsyncSession = Depends(get_db)):
     return payload.BaseResponse(
         date=date.today(),
