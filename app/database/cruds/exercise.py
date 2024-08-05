@@ -75,9 +75,11 @@ async def create_exercise(ex:CreateExerciseDto, session:AsyncSession):
     exercise_uuid =str(uuid.uuid4()) # generate unique identifier for the exercise
     new_exercise  = None
     new_exercise =  Exercise(exercise_uuid, ex.title,ex.thumbnail,
+                                 
                                  ex.description,
                                  tip = ex.tip,
                                  exercise_level=q.question_level,
+                                 video = ex.video,
                                  reading_text=ex.reading_text,voice=ex.voice,transcript=ex.transcript
                                  )
     session.add(new_exercise) # add to database
@@ -103,6 +105,7 @@ async def create_exercise(ex:CreateExerciseDto, session:AsyncSession):
             description=new_exercise.description,  
             tip=new_exercise.tip,
             reading_text=new_exercise.reading_text,
+            video= new_exercise.video,
             voice=new_exercise.voice,
             transcript=new_exercise.transcript,
             
@@ -179,6 +182,7 @@ async def list_all_exercises(session:AsyncSession):
                 description=exercise.description,
                 tip=exercise.tip,
                 reading_text=exercise.reading_text,
+                video=exercise.video,
                 voice=exercise.voice,
                 transcript=exercise.transcript,
                 # skill_uuid = str(None if ex.skill_id==None else ex.skill_id),
@@ -196,7 +200,6 @@ async def list_all_exercises(session:AsyncSession):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
-
 async def find_exercise_by_uuid(id:str, session=AsyncSession)->RepsonseExerciseDto:
     if not is_valid_uuid(id):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid exercise uuid {id} 😏")
@@ -247,6 +250,7 @@ async def find_exercise_by_uuid(id:str, session=AsyncSession)->RepsonseExerciseD
             exercise_level= ex.exercise_level,
             reading_text=ex.reading_text,
             transcript=ex.transcript,
+            video=ex.video,
             voice=ex.voice
         )
 

@@ -25,3 +25,10 @@ class ResponseLessonWithoutSectionsDto(BaseModel):
     description:Optional[str]
     thumbnail: Optional[str]
     lesson_level:str
+
+
+class RepsonseLessonWhenSearching(BaseModel):
+    lesson_uuid: Optional[str]
+    name:Optional[str]
+    description:Optional[str]
+    thumbnail: Optional[str]
