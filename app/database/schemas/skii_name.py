@@ -6,4 +6,5 @@ class Skill(Enum):
     READING = "READING",
     WRITING = "WRITING",
     LISTENING = "LISTENING",
+    SPEAKING = "SPEAKING",
 
