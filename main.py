@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import user, lesson, exercise, question, skill, file, auth, section,grammer, vocabulary, submit_answer
+from app.routers import user, lesson, exercise, question, skill, file, auth, section,grammer, vocabulary, submit_answer, search_all
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from app.database.database import Base, engine
@@ -27,6 +27,8 @@ app.include_router(lesson.lesson_router,tags=["Lesson"])
 app.include_router(grammer.grammar_router,tags=["Grammar"])
 app.include_router(vocabulary.vocabulary_router,tags=["Vocabulary"])
 app.include_router(submit_answer.submit_answer_router, tags=["Submit Answer"])
+# search
+app.include_router(search_all.search_router, tags=["Search for lesson and exercises"])
 
 app.add_middleware(
     CORSMiddleware,

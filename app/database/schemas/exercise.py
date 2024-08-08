@@ -11,6 +11,7 @@ class CreateExerciseDto(BaseModel):
     description: str
     tip:str
     reading_text: Optional[str] = "reading text"
+    video: Optional[str] = "Video link"
     voice : Optional[str] = "voice link" 
     transcript: Optional[str] = "transcript for reading text"
     # skill_uuid: Optional[str]=None
@@ -25,6 +26,7 @@ class RepsonseExerciseDto(BaseModel):
     description: str
     tip:str
     reading_text: Optional[str] = None
+    video: Optional[str] = "Video link"
     voice : Optional[str] = None 
     transcript: Optional[str] = None
     exercise_level: Optional[str]
@@ -38,8 +40,20 @@ class RepsonseExerciseWithoutQuestionDto(BaseModel):
     description: str
     tip:str
     reading_text: Optional[str] = None
+    video: Optional[str] = "Video link"
     voice : Optional[str] = None 
     transcript: Optional[str] = None
     exercise_level: Optional[str]
     # skill_uuid: Optional[str]=None
     # questions:Optional[list[question.ResponseQuestionDto]]
+
+class ReponseExerciseWhenSearching(BaseModel):
+    ex_uuid: str
+    title: str
+    thumbnail:str
+    description: str
+    tip:str
+    reading_text: Optional[str] = "reading text"
+    video: Optional[str] = "Video link"
+    voice : Optional[str] = "voice link" 
+    transcript: Optional[str] = "transcript for reading text"

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, Depends, status
 from datetime import date
 from app.database.schemas import payload
 from app.database.database import get_db
@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Annotated
 from app.database.cruds.auth import get_current_user
 user_dependency = Annotated[dict,Depends(get_current_user)]
+# 
 section_router = APIRouter()
 
 

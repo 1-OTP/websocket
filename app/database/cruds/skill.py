@@ -47,7 +47,7 @@ async def create_new_skill(sk:skill.CreateSkillDto, session=AsyncSession):
     if sk.skill_level.upper() not in MyLevel.__members__:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill level should be one of A1 to C2, but you given {sk.skill_level}")
     if sk.skill_name.upper() not in sname.__members__:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING or LISTENING, but you given {sk.skill_name}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING, LISTENING or SPEAKING, but you given {sk.skill_name}")
         
     all_exercises_related_skil:exercise.RepsonseExerciseDto = []   
     for ex_uuid_ in sk.exercises_uuid:
@@ -130,7 +130,7 @@ async def delete_skill_by_uuid(skill_uuid:str, session=AsyncSession):
 
 async def get_all_skills_by_skill_name(name:str, session=AsyncSession):
     if name.upper() not in sname.__members__:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING or LISTENING, but you given {name}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING, LISTENING, or SPEAKING, but you given {name}")
     query = select(Skill).filter(Skill.skill_name.ilike(f"{name}")).order_by(Skill.skill_level)
     result = await session.execute(query)
     skills = result.scalars().all()
@@ -152,7 +152,7 @@ async def get_all_skills_by_skill_name(name:str, session=AsyncSession):
 
 async def get_skill_by_name_and_level(name, level, session=AsyncSession):
     if name.upper() not in sname.__members__:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING or LISTENING, but you given {name}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill name should be one of READING, WRITING, LISTENING, or SPEAKING, but you given {name}")
     if level.upper() not in MyLevel.__members__:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Skill level should be one of A1 to C2, but you given {level}")
     query = select(Skill).filter(Skill.skill_name.ilike(f"%{name}%")).filter(Skill.skill_level.ilike(f"%{level}%"))
