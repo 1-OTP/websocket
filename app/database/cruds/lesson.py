@@ -60,6 +60,7 @@ async def get_lesson_byuuid(uuid:str, session:AsyncSession):
     )
 
 async def get_lesson_by_vocabulary_id(vocab_id:int, session:AsyncSession):
+    print(vocab_id)
     query = select(Lesson).filter(Lesson.vocabulary_id == vocab_id)
     result = await session.execute(query)
     less:Lesson = result.scalars().all()
@@ -102,6 +103,7 @@ async def get_lesson_by_vocabulary_id(vocab_id:int, session:AsyncSession):
         ) )
     return all_lessons
 async def get_lesson_by_grammar_id(grammar_id:int, session:AsyncSession):
+    print(grammar_id)
     query = select(Lesson).filter(Lesson.grammar_id==grammar_id)
     result = await session.execute(query)
     less:Lesson = result.scalars().all()
